@@ -1,0 +1,29 @@
+name: Deploy to ECS
+run-name: Deploy to ECS [${{ github.head_ref || github.ref_name }}]
+
+on: push
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./
+    
+permissions: read-all
+
+jobs:
+  build-front-app:
+    name: Build
+    uses: ./.github/workflows/build-front-app.yml
+
+  deploy-front-dev-fargate:
+    name: Deploy
+    uses: ./.github/workflows/deploy-to-fargate.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      environment: development
+    secrets:
+      aws-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}
+      ecs-task-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}
+      ecs-execution-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}

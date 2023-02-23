@@ -15,8 +15,9 @@ jobs:
     name: Build
     uses: ./.github/workflows/build-front-app.yml
 
-  deploy-front-dev-fargate:
+  deploy-front-app:
     name: Deploy
+    needs: build-front-app
     uses: ./.github/workflows/deploy-to-fargate.yml
     permissions:
       id-token: write
@@ -24,6 +25,6 @@ jobs:
     with:
       environment: development
     secrets:
-      aws-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}
-      ecs-task-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}
-      ecs-execution-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}
+      aws-role-arn: ${{ secrets.SSE_GHA_ROLE_ARN }}
+      ecs-task-role-arn: ${{ secrets.SSE__GHA_ROLE_ARN }}
+      ecs-execution-role-arn: ${{ secrets.SSE__GHA_ROLE_ARN }}

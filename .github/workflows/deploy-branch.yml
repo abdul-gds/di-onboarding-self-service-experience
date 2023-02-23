@@ -1,4 +1,4 @@
-name: Deploy branch preview
+name: Deploy branch 
 run-name: Deploy preview [${{ github.head_ref || github.ref_name }}]
 
 on: workflow_dispatch
@@ -9,22 +9,9 @@ jobs:
     name: Build
     uses: ./.github/workflows/build-front-app.yml
 
-  deploy-front-preview-paas:
+  deploy-front-app:
     name: Preview
     needs: build-front-app
-    uses: ./.github/workflows/deploy-to-paas.yml
-    with:
-      environment: preview
-      cf-space-name: self-service-preview
-      app-name-prefix: di-sse-prev
-      cognito-client: StubCognitoClient
-      lambda-facade: StubLambdaFacade
-    secrets:
-      cf-username: ${{ secrets.CF_USERNAME }}
-      cf-password: ${{ secrets.CF_PASSWORD }}
-
-  deploy-front-preview-fargate:
-    name: Preview
     uses: ./.github/workflows/deploy-to-fargate.yml
     permissions:
       id-token: write
@@ -32,6 +19,6 @@ jobs:
     with:
       environment: development
     secrets:
-      aws-role-arn: ${{ secrets.GHA_AWS_ROLE_ARN }}
-      ecs-task-role-arn: ${{ secrets.AWS_ECS_TASK_ROLE_ARN }}
-      ecs-execution-role-arn: ${{ secrets.AWS_ECS_EXECUTION_ROLE_ARN }}
+      aws-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}
+      ecs-task-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}
+      ecs-execution-role-arn: ${{ secrets.ABDUL_GHA_ROLE_ARN }}
